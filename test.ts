@@ -5,3 +5,13 @@ function add(a: number, b: number): number {
 }
 
 console.log(add(5, 3));
+
+interface Person {
+  name: string;
+  age: number;
+}
+
+const person: Person = {
+  name: "Alice",
+  age: 30,
+}; 
