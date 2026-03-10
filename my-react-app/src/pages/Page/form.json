@@ -1,0 +1,169 @@
+{
+  "version": 3,
+  "endpoint": "/api/users",
+  "method": "POST",
+
+  "settings": {
+    "autosave": true,
+    "autosaveDelay": 1500
+  },
+
+  "workflow": {
+    "steps": [
+      {
+        "id": "personal",
+        "title": "Informations personnelles"
+      },
+      {
+        "id": "account",
+        "title": "Compte"
+      },
+      {
+        "id": "preferences",
+        "title": "Préférences"
+      }
+    ]
+  },
+
+  "mapping": {
+    "fromApi": {
+      "firstName": "user.first_name",
+      "lastName": "user.last_name",
+      "country": "user.address.country"
+    },
+    "toApi": {
+      "firstName": "first_name",
+      "lastName": "last_name",
+      "country": "country"
+    }
+  },
+
+  "sections": [
+    {
+      "step": "personal",
+      "title": "Identité",
+      "grid": 2,
+
+      "fields": [
+        {
+          "name": "firstName",
+          "label": "Prénom",
+          "type": "text",
+          "validation": {
+            "required": true,
+            "minLength": 2
+          }
+        },
+
+        {
+          "name": "lastName",
+          "label": "Nom",
+          "type": "text",
+          "validation": {
+            "required": true
+          }
+        },
+
+        {
+          "name": "birthDate",
+          "label": "Date de naissance",
+          "type": "date"
+        }
+      ]
+    },
+
+    {
+      "step": "account",
+      "title": "Compte",
+      "grid": 2,
+
+      "fields": [
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "text",
+          "validation": {
+            "required": true,
+            "pattern": "email"
+          }
+        },
+
+        {
+          "name": "password",
+          "label": "Mot de passe",
+          "type": "password",
+          "validation": {
+            "required": true,
+            "minLength": 8
+          }
+        },
+
+        {
+          "name": "passwordConfirm",
+          "label": "Confirmation du mot de passe",
+          "type": "password",
+          "validation": {
+            "matchesField": "password"
+          }
+        },
+
+        {
+          "name": "role",
+          "label": "Rôle",
+          "type": "select",
+          "optionsEndpoint": "/api/roles"
+        }
+      ]
+    },
+
+    {
+      "step": "preferences",
+      "title": "Localisation",
+      "grid": 2,
+
+      "fields": [
+        {
+          "name": "country",
+          "label": "Pays",
+          "type": "select",
+          "optionsEndpoint": "/api/countries"
+        },
+
+        {
+          "name": "city",
+          "label": "Ville",
+          "type": "select",
+
+          "dependsOn": "country",
+
+          "optionsEndpoint": "/api/cities?country={value}"
+        }
+      ]
+    },
+
+    {
+      "step": "preferences",
+      "title": "Options",
+      "fields": [
+        {
+          "name": "newsletter",
+          "label": "Recevoir la newsletter",
+          "type": "checkbox"
+        },
+
+        {
+          "name": "adminCode",
+          "label": "Code administrateur",
+          "type": "text",
+
+          "visibleWhen": {
+            "all": [
+              { "field": "role", "equals": "admin" },
+              { "field": "newsletter", "equals": true }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
