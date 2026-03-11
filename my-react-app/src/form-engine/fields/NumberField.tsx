@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
 import type { FieldComponentProps } from '@form-engine/types';
 
-const TextField = ({ field, control, error }: FieldComponentProps) => (
+const NumberField = ({ field, control, error }: FieldComponentProps) => (
     <Controller
         name={field.name}
         control={control}
@@ -18,7 +18,7 @@ const TextField = ({ field, control, error }: FieldComponentProps) => (
 
                 <input
                     {...fieldProps}
-                    type={field.type || 'text'}
+                    type="number"
                     placeholder={field.placeholder}
                     className={`w-full px-3 py-2 bg-slate-700 border rounded text-white placeholder-slate-400 focus:outline-none focus:ring-1 transition ${
                         error
@@ -38,4 +38,4 @@ const TextField = ({ field, control, error }: FieldComponentProps) => (
     />
 );
 
-export default TextField;
+export default NumberField;

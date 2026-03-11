@@ -1,16 +1,12 @@
-import { fieldRegistry } from "@form-engine/registry/fieldRegistry";
-import type { FieldComponentProps } from "@form-engine/types";
+import { fieldRegistry } from '@form-engine/registry/fieldRegistry';
+import type { FieldComponentProps } from '@form-engine/types';
 
-export default function FieldRenderer({
-  field,
-  register,
-  error,
-}: FieldComponentProps) {
-  const Component = fieldRegistry[field.type] as any;
+export default function FieldRenderer({ field, control, error }: FieldComponentProps) {
+    const Component = fieldRegistry[field.type] as any;
 
-  if (!Component) {
-    return <div className="text-red-500">Unsupported field: {field.type}</div>;
-  }
+    if (!Component) {
+        return <div className="text-red-500">Unsupported field: {field.type}</div>;
+    }
 
-  return <Component field={field} register={register} error={error} />;
+    return <Component field={field} control={control} error={error} />;
 }

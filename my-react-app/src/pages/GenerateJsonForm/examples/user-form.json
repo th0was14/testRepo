@@ -1,0 +1,52 @@
+{
+    "endpoint": "/api/users",
+    "method": "POST",
+    "sections": [
+        {
+            "title": "Créer/Modifier User",
+            "grid": 1,
+            "fields": [
+                {
+                    "name": "firstName",
+                    "type": "text",
+                    "label": "First Name",
+                    "placeholder": "Entrez first name...",
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "name": "lastName",
+                    "type": "text",
+                    "label": "Last Name",
+                    "placeholder": "Entrez last name...",
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "name": "email",
+                    "type": "email",
+                    "label": "Email",
+                    "placeholder": "exemple@mail.com",
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "name": "birthDate",
+                    "type": "date",
+                    "label": "Birth Date",
+                    "validation": {
+                        "required": false
+                    }
+                },
+                {
+                    "name": "isActive",
+                    "type": "checkbox",
+                    "label": "Is Active"
+                }
+            ]
+        }
+    ]
+}

@@ -1,115 +1,93 @@
-import type { FieldValues } from "react-hook-form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { buildSchema } from "@form-engine/buildSchema";
-import FieldRenderer from "@form-engine/FieldRenderer";
-import type { FormConfig, FieldConfig } from "@form-engine/types";
-import { useApiMutation } from "@/hooks/useApi";
+import type { FieldValues } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { buildSchema } from '@form-engine/buildSchema';
+import FieldRenderer from '@form-engine/FieldRenderer';
+import type { FormConfig, FieldConfig } from '@form-engine/types';
+import { useApiMutation } from '@/hooks/useApi';
 
 interface FormEngineProps {
-  config: FormConfig;
+    config: FormConfig;
 }
 
 export default function FormEngine({ config }: FormEngineProps) {
-  const schema = buildSchema(config);
+    const schema = buildSchema(config);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<FieldValues>({
-    resolver: zodResolver(schema),
-  });
-
-  const values = watch();
-
-  const { mutate, isPending, error, isSuccess } = useApiMutation<
-    unknown,
-    FieldValues
-  >(async (data) => {
-    const response = await fetch(config.endpoint, {
-      method: config.method || "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+    const {
+        control,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm<FieldValues>({
+        resolver: zodResolver(schema),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    const values = watch();
 
-    return response.json();
-  });
+    const { mutate, isPending, error, isSuccess } = useApiMutation<unknown, FieldValues>(async (data) => {
+        const response = await fetch(config.endpoint, {
+            method: config.method || 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
 
-  const isVisible = (field: FieldConfig): boolean => {
-    if (!field.visibleWhen) return true;
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-    const visibleWhen = field.visibleWhen as
-      | { field: string; equals: unknown }
-      | { all: Array<{ field: string; equals: unknown }> };
+        return response.json();
+    });
 
-    if ("all" in visibleWhen) {
-      // Handle { all: [{field, equals}, ...] }
-      return visibleWhen.all.every(
-        (condition) => values[condition.field] === condition.equals,
-      );
-    }
+    const isVisible = (field: FieldConfig): boolean => {
+        if (!field.visibleWhen) return true;
 
-    // Handle { field, equals }
-    const depValue = values[visibleWhen.field];
-    return depValue === visibleWhen.equals;
-  };
+        const visibleWhen = field.visibleWhen as { field: string; equals: unknown } | { all: Array<{ field: string; equals: unknown }> };
 
-  const onSubmit = (data: FieldValues) => {
-    mutate(data);
-  };
+        if ('all' in visibleWhen) {
+            // Handle { all: [{field, equals}, ...] }
+            return visibleWhen.all.every((condition) => values[condition.field] === condition.equals);
+        }
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {config.sections.map((section) => (
-        <div key={section.title}>
-          <h2 className="text-lg font-bold mb-4 text-white">{section.title}</h2>
+        // Handle { field, equals }
+        const depValue = values[visibleWhen.field];
+        return depValue === visibleWhen.equals;
+    };
 
-          <div className={`grid grid-cols-${section.grid || 1} gap-4`}>
-            {section.fields.map((field) => {
-              if (!isVisible(field)) return null;
+    const onSubmit = (data: FieldValues) => {
+        mutate(data);
+    };
 
-              const error = errors[field.name];
+    return (
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {config.sections.map((section) => (
+                <div key={section.title}>
+                    <h2 className="text-lg font-bold mb-4 text-white">{section.title}</h2>
 
-              return (
-                <FieldRenderer
-                  key={field.name}
-                  field={field}
-                  register={register}
-                  error={error}
-                />
-              );
-            })}
-          </div>
-        </div>
-      ))}
+                    <div className={`grid grid-cols-${section.grid || 1} gap-4`}>
+                        {section.fields.map((field) => {
+                            if (!isVisible(field)) return null;
 
-      {error && (
-        <div className="p-4 bg-red-500/10 border border-red-500 rounded text-red-400">
-          {error.message}
-        </div>
-      )}
+                            const error = errors[field.name];
 
-      {isSuccess && (
-        <div className="p-4 bg-green-500/10 border border-green-500 rounded text-green-400">
-          Form submitted successfully!
-        </div>
-      )}
+                            return <FieldRenderer key={field.name} field={field} control={control} error={error} />;
+                        })}
+                    </div>
+                </div>
+            ))}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition"
-      >
-        {isPending ? "Submitting..." : "Submit"}
-      </button>
-    </form>
-  );
+            {error && <div className="p-4 bg-red-500/10 border border-red-500 rounded text-red-400">{error.message}</div>}
+
+            {isSuccess && <div className="p-4 bg-green-500/10 border border-green-500 rounded text-green-400">Form submitted successfully!</div>}
+
+            <button
+                type="submit"
+                disabled={isPending}
+                className="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            >
+                {isPending ? 'Submitting...' : 'Submit'}
+            </button>
+        </form>
+    );
 }

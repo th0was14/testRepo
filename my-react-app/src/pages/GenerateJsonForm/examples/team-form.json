@@ -1,0 +1,76 @@
+{
+    "endpoint": "/api/teams",
+    "method": "POST",
+    "sections": [
+        {
+            "title": "Créer/Modifier Team",
+            "grid": 2,
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "text",
+                    "label": "Name",
+                    "placeholder": "Entrez name...",
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "name": "department",
+                    "type": "select",
+                    "label": "Department",
+                    "options": [
+                        {
+                            "value": "Engineering",
+                            "label": "Engineering"
+                        },
+                        {
+                            "value": "Design",
+                            "label": "Design"
+                        },
+                        {
+                            "value": "Sales",
+                            "label": "Sales"
+                        },
+                        {
+                            "value": "HR",
+                            "label": "HR"
+                        },
+                        {
+                            "value": "Operations",
+                            "label": "Operations"
+                        }
+                    ],
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "name": "description",
+                    "type": "textarea",
+                    "label": "Description",
+                    "placeholder": "Entrez description...",
+                    "validation": {
+                        "required": false
+                    }
+                },
+                {
+                    "name": "memberCount",
+                    "type": "number",
+                    "label": "Member Count",
+                    "validation": {
+                        "required": false
+                    }
+                },
+                {
+                    "name": "budget",
+                    "type": "number",
+                    "label": "Budget",
+                    "validation": {
+                        "required": false
+                    }
+                }
+            ]
+        }
+    ]
+}

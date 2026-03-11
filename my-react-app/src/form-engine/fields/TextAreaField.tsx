@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
 import type { FieldComponentProps } from '@form-engine/types';
 
-const TextField = ({ field, control, error }: FieldComponentProps) => (
+const TextAreaField = ({ field, control, error }: FieldComponentProps) => (
     <Controller
         name={field.name}
         control={control}
@@ -16,11 +16,11 @@ const TextField = ({ field, control, error }: FieldComponentProps) => (
                     </label>
                 )}
 
-                <input
+                <textarea
                     {...fieldProps}
-                    type={field.type || 'text'}
                     placeholder={field.placeholder}
-                    className={`w-full px-3 py-2 bg-slate-700 border rounded text-white placeholder-slate-400 focus:outline-none focus:ring-1 transition ${
+                    rows={field.rows || 4}
+                    className={`w-full px-3 py-2 bg-slate-700 border rounded text-white placeholder-slate-400 focus:outline-none focus:ring-1 transition resize-vertical ${
                         error
                             ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
                             : 'border-slate-600 focus:border-purple-500 focus:ring-purple-500'
@@ -38,4 +38,4 @@ const TextField = ({ field, control, error }: FieldComponentProps) => (
     />
 );
 
-export default TextField;
+export default TextAreaField;

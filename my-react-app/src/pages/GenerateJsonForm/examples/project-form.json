@@ -1,0 +1,106 @@
+{
+    "endpoint": "/api/projects",
+    "method": "POST",
+    "sections": [
+        {
+            "title": "Créer/Modifier Project",
+            "grid": 2,
+            "fields": [
+                {
+                    "name": "title",
+                    "type": "text",
+                    "label": "Title",
+                    "placeholder": "Entrez title...",
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "name": "priority",
+                    "type": "select",
+                    "label": "Priority",
+                    "options": [
+                        {
+                            "value": "Low",
+                            "label": "Low"
+                        },
+                        {
+                            "value": "Medium",
+                            "label": "Medium"
+                        },
+                        {
+                            "value": "High",
+                            "label": "High"
+                        },
+                        {
+                            "value": "Critical",
+                            "label": "Critical"
+                        }
+                    ],
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "name": "description",
+                    "type": "textarea",
+                    "label": "Description",
+                    "placeholder": "Entrez description...",
+                    "validation": {
+                        "required": false
+                    }
+                },
+                {
+                    "name": "startDate",
+                    "type": "date",
+                    "label": "Start Date",
+                    "validation": {
+                        "required": true
+                    }
+                },
+                {
+                    "name": "endDate",
+                    "type": "date",
+                    "label": "End Date",
+                    "validation": {
+                        "required": false
+                    }
+                },
+                {
+                    "name": "status",
+                    "type": "select",
+                    "label": "Status",
+                    "options": [
+                        {
+                            "value": "Planning",
+                            "label": "Planning"
+                        },
+                        {
+                            "value": "In Progress",
+                            "label": "In Progress"
+                        },
+                        {
+                            "value": "Completed",
+                            "label": "Completed"
+                        },
+                        {
+                            "value": "On Hold",
+                            "label": "On Hold"
+                        }
+                    ],
+                    "validation": {
+                        "required": false
+                    }
+                },
+                {
+                    "name": "budget",
+                    "type": "number",
+                    "label": "Budget",
+                    "validation": {
+                        "required": false
+                    }
+                }
+            ]
+        }
+    ]
+}

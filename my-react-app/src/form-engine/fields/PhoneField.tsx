@@ -1,11 +1,17 @@
 import { Controller } from 'react-hook-form';
 import type { FieldComponentProps } from '@form-engine/types';
 
-const TextField = ({ field, control, error }: FieldComponentProps) => (
+const PhoneField = ({ field, control, error }: FieldComponentProps) => (
     <Controller
         name={field.name}
         control={control}
-        rules={field.validation}
+        rules={{
+            ...field.validation,
+            pattern: field.validation?.pattern || {
+                value: /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/,
+                message: 'Invalid phone number',
+            },
+        }}
         defaultValue=""
         render={({ field: fieldProps }) => (
             <div className="space-y-2">
@@ -18,8 +24,8 @@ const TextField = ({ field, control, error }: FieldComponentProps) => (
 
                 <input
                     {...fieldProps}
-                    type={field.type || 'text'}
-                    placeholder={field.placeholder}
+                    type="tel"
+                    placeholder={field.placeholder || '+1 (555) 000-0000'}
                     className={`w-full px-3 py-2 bg-slate-700 border rounded text-white placeholder-slate-400 focus:outline-none focus:ring-1 transition ${
                         error
                             ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
@@ -38,4 +44,4 @@ const TextField = ({ field, control, error }: FieldComponentProps) => (
     />
 );
 
-export default TextField;
+export default PhoneField;

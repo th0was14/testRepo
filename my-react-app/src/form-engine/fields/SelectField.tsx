@@ -1,26 +1,47 @@
-import type { FieldComponentProps } from "@form-engine/types";
+import { Controller } from 'react-hook-form';
+import type { FieldComponentProps } from '@form-engine/types';
 
-const SelectField = ({ field, register }: FieldComponentProps) => (
-  <div>
-    <label className="block mb-2 text-sm font-medium text-white">
-      {field.label}
-    </label>
+const SelectField = ({ field, control, error }: FieldComponentProps) => (
+    <Controller
+        name={field.name}
+        control={control}
+        rules={field.validation}
+        defaultValue=""
+        render={({ field: fieldProps }) => (
+            <div className="space-y-2">
+                {field.label && (
+                    <label className="block text-sm font-medium text-white">
+                        {field.label}
+                        {field.validation?.required && <span className="text-red-400 ml-1">*</span>}
+                    </label>
+                )}
 
-    <select
-      {...register(field.name as never)}
-      className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
-    >
-      <option value="" className="bg-slate-700">
-        Select
-      </option>
+                <select
+                    {...fieldProps}
+                    className={`w-full px-3 py-2 bg-slate-700 border rounded text-white focus:outline-none focus:ring-1 transition ${
+                        error
+                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                            : 'border-slate-600 focus:border-purple-500 focus:ring-purple-500'
+                    }`}
+                >
+                    <option value="">Select</option>
 
-      {field.options?.map((o) => (
-        <option key={o.value} value={o.value} className="bg-slate-700">
-          {o.label}
-        </option>
-      ))}
-    </select>
-  </div>
+                    {field.options?.map((o) => (
+                        <option key={o.value} value={o.value} className="bg-slate-700">
+                            {o.label}
+                        </option>
+                    ))}
+                </select>
+
+                {error && (
+                    <p className="text-sm text-red-400 flex items-center gap-1">
+                        <span>⚠</span>
+                        {error.message}
+                    </p>
+                )}
+            </div>
+        )}
+    />
 );
 
 export default SelectField;
